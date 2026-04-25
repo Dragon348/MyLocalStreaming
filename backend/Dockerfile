@@ -1,29 +1,40 @@
-FROM python:3.12-slim
+FROM python:3.12-slim AS builder
+
+# Установка системных зависимостей для сборки
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установка uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
 
-# Install FFmpeg and curl for healthcheck
-RUN apt-get update && apt-get install -y \
+# Копируем файлы зависимостей
+COPY pyproject.toml .
+
+# Создаем виртуальное окружение и устанавливаем зависимости
+RUN uv venv /app/.venv && \
+    UV_PROJECT_ENVIRONMENT=/app/.venv uv pip install -e .
+
+# --- Runtime Stage ---
+FROM python:3.12-slim
+
+# Установка runtime зависимостей (ffmpeg для аудио)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+WORKDIR /app
 
-# Copy dependency files
-COPY pyproject.toml ./
-
-# Install dependencies (production only)
-RUN uv sync --frozen --no-dev
-
-# Copy application code
+# Копируем виртуальное окружение и код из билдера
+COPY --from=builder /app/.venv /app/.venv
 COPY . .
 
-# Create non-root user
-RUN useradd -m -u 1000 music && chown -R music:music /app
-USER music
+# Активируем окружение через PATH
+ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 
-CMD ["uv", "run", "fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
