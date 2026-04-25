@@ -1,0 +1,18 @@
+{
+    auto_https on
+    email admin@yourdomain.com
+}
+
+:80 {
+    redir https://{host}{uri} permanent
+}
+
+music.yourdomain.com {
+    reverse_proxy /api/v1/* backend:8000
+
+    reverse_proxy /static/* backend:8000
+
+    reverse_proxy /* web:80
+
+    tls internal
+}
