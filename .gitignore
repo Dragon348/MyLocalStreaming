@@ -1,66 +1,58 @@
 ```
-# Dependencies
-node_modules/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py~
+*.py.class
+.Python
+
+# Virtual environments
 venv/
 .venv/
-__pycache__/
-.mypy_cache/
-.pytest_cache/
-target/
-.gradle/
+env/
+ENV/
+.ENV/
+.envrc
 
 # Build artifacts
-dist/
 build/
-*.pyc
-*.class
-*.o
-*.exe
-*.dll
-*.so
-*.a
-*.obj
-*.out
+dist/
+*.egg
+*.egg-info/
+.installed.cfg
+*.egg-link
 
-# Editor/IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*.tmp
+# Testing
+.coverage
+coverage/
+htmlcov/
+.nyc_output/
+.pytest_cache/
+.hypothesis/
 
-# System files
-.DS_Store
-Thumbs.db
-.env
-.env.local
-*.env.*
+# Linting
+.mypy_cache/
+.flake8
+.isort_cache/
 
 # Logs
 *.log
+*.log.*
 
-# Coverage
-coverage/
-htmlcov/
-.coverage
+# Environment variables
+.env
+.env.*
+!.env.example
 
-# Compressed files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Icon?
 ```
