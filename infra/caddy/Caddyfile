@@ -1,0 +1,21 @@
+{
+    auto_https off
+}
+
+:80 {
+    route /health* {
+        respond "OK" 200
+    }
+    
+    reverse_proxy backend:8000
+}
+
+music.yourdomain.com {
+    reverse_proxy /api/v1/* backend:8000
+    reverse_proxy /docs backend:8000
+    reverse_proxy /openapi.json backend:8000
+    reverse_proxy /health backend:8000
+    reverse_proxy /* backend:8000
+
+    tls internal
+}
