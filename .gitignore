@@ -1,75 +1,66 @@
 ```
-# Python
+# Dependencies
+node_modules/
+venv/
+.venv/
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
+.mypy_cache/
+.pytest_cache/
+target/
+.gradle/
+
+# Build artifacts
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+build/
+*.pyc
+*.class
+*.o
+*.exe
+*.dll
+*.so
+*.a
+*.obj
+*.out
 
-# Environment
-.env
-.env.local
-.env.*
-.env~*
-
-# Docker
-.dockerenv
-.DS_Store
-
-# IDE
+# Editor/IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 *.tmp
 
+# System files
+.DS_Store
+Thumbs.db
+.env
+.env.local
+*.env.*
+
 # Logs
 *.log
 
 # Coverage
-.coverage
 coverage/
 htmlcov/
+.coverage
 
-# Pytest
-.pytest_cache/
-
-# Mypy
-.mypy_cache/
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
 ```
