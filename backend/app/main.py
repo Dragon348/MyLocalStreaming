@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import init_db
+from app.api.auth import router as auth_router
+from app.api.tracks import router as tracks_router
+from app.api.playlists import router as playlists_router
 
 
 def create_app() -> FastAPI:
@@ -37,6 +40,11 @@ def create_app() -> FastAPI:
             "status": "healthy",
             "environment": settings.environment,
         }
+
+    # Include routers
+    app.include_router(auth_router, prefix="/api/v1")
+    app.include_router(tracks_router, prefix="/api/v1")
+    app.include_router(playlists_router, prefix="/api/v1")
 
     return app
 

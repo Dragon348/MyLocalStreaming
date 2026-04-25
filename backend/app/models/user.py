@@ -1,7 +1,10 @@
 from datetime import datetime
-from typing import Optional
-from sqlmodel import Field, SQLModel
+from typing import Optional, TYPE_CHECKING
+from sqlmodel import Field, SQLModel, Relationship
 import uuid
+
+if TYPE_CHECKING:
+    from app.models.playlist import Playlist
 
 
 class User(SQLModel, table=True):
@@ -18,3 +21,6 @@ class User(SQLModel, table=True):
 
     # Cache limit on device (in MB)
     cache_limit_mb: int = Field(default=1024)
+
+    # Relationships
+    playlists: list["Playlist"] = Relationship(back_populates="owner")

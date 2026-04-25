@@ -9,21 +9,21 @@ class Track(SQLModel, table=True):
 
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     title: str = Field(index=True)
-    duration_ms: int
+    duration_ms: int = Field(ge=0)
     file_path: str = Field(unique=True)
-    file_size_bytes: int
+    file_size_bytes: int = Field(ge=0)
     mime_type: str  # audio/mpeg, audio/flac, etc.
-    bitrate_kbps: int
-    sample_rate_hz: int
-    channels: int
+    bitrate_kbps: int = Field(ge=0)
+    sample_rate_hz: int = Field(ge=0)
+    channels: int = Field(ge=1)
 
     # Full-text search
     search_vector: str = Field(sa_column_kwargs={"index": True})
 
-    album_id: Optional[str] = Field(default=None, foreign_key="albums.id")
-    artist_id: Optional[str] = Field(default=None, foreign_key="artists.id")
+    album_id: Optional[str] = Field(default=None, foreign_key="albums.id", index=True)
+    artist_id: Optional[str] = Field(default=None, foreign_key="artists.id", index=True)
 
-    play_count: int = Field(default=0)
+    play_count: int = Field(default=0, ge=0)
     last_played: Optional[datetime] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
@@ -37,8 +37,8 @@ class Album(SQLModel, table=True):
 
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     title: str = Field(index=True)
-    artist_id: Optional[str] = Field(default=None, foreign_key="artists.id")
-    release_year: Optional[int] = None
+    artist_id: Optional[str] = Field(default=None, foreign_key="artists.id", index=True)
+    release_year: Optional[int] = Field(default=None, ge=1900, le=2100)
     cover_art_path: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
