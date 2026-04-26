@@ -7,17 +7,17 @@
         respond "OK" 200
     }
     
-    # Frontend static files
-    root * /usr/share/caddy
-    file_server
-    
-    # API routes proxy to backend
+    # API routes proxy to backend (must be before file_server)
     reverse_proxy /api/v1/* backend:8000
     reverse_proxy /docs backend:8000
     reverse_proxy /openapi.json backend:8000
     reverse_proxy /health backend:8000
     reverse_proxy /stream/* backend:8000
     reverse_proxy /ws/* backend:8000
+    
+    # Frontend static files
+    root * /usr/share/caddy
+    file_server
     
     # All other routes go to frontend (SPA)
     try_files {path} /index.html
