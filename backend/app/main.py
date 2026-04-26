@@ -42,9 +42,10 @@ def create_app() -> FastAPI:
         }
 
     # Include routers with API versioning
-    app.include_router(auth_router, prefix="/api/v1")
-    app.include_router(tracks_router, prefix="/api/v1")
-    app.include_router(playlists_router, prefix="/api/v1")
+    # Роутеры уже содержат свои префиксы (/auth, /tracks, /playlists) внутри файлов
+    app.include_router(auth_router, prefix="/api/v1")  # -> /api/v1/auth
+    app.include_router(tracks_router, prefix="/api/v1")  # -> /api/v1/tracks
+    app.include_router(playlists_router, prefix="/api/v1")  # -> /api/v1/playlists
 
     return app
 
