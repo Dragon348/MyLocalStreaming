@@ -81,6 +81,8 @@ services:
       - backend
     networks:
       - music-network
+    volumes:
+      - frontend_static:/usr/share/nginx/html:ro
 
   # ==================== Reverse Proxy ====================
   caddy:
@@ -92,6 +94,7 @@ services:
       - "443:443"
     volumes:
       - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - frontend_static:/usr/share/caddy:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
@@ -113,3 +116,4 @@ volumes:
   cache_data:
   caddy_data:
   caddy_config:
+  frontend_static:
