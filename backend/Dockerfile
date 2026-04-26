@@ -15,7 +15,7 @@ COPY pyproject.toml .
 
 # Создаем виртуальное окружение и устанавливаем зависимости
 RUN uv venv /app/.venv && \
-    UV_PROJECT_ENVIRONMENT=/app/.venv uv pip install -e .
+    UV_PROJECT_ENVIRONMENT=/app/.venv uv pip install .
 
 # --- Runtime Stage ---
 FROM python:3.12-slim

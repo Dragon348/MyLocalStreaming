@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     jwt_secret: str = "changeme-jwt-secret"
 
     # Database
-    database_url: str = "postgresql+asyncpg://music:changeme@postgres:5432/music_streaming"
-    redis_url: str = "redis://redis:6379/0"
+    database_url: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./music.db")
+    redis_url: str = "redis://localhost:6379/0"
 
     # Storage
     music_dir: str = "/data/music"

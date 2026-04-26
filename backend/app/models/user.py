@@ -1,13 +1,16 @@
 from datetime import datetime
-from typing import Optional
-from sqlmodel import Field, SQLModel
+from typing import Optional, List, TYPE_CHECKING
+from sqlmodel import Field, SQLModel, Relationship
 import uuid
+
+if TYPE_CHECKING:
+    from app.models.playlist import Playlist
 
 
 class User(SQLModel, table=True):
     __tablename__ = "users"
 
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True, index=True)
     username: str = Field(unique=True, index=True, min_length=3, max_length=50)
     email: str = Field(unique=True, index=True)
     hashed_password: str
@@ -15,6 +18,6 @@ class User(SQLModel, table=True):
     is_active: bool = Field(default=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     last_login: Optional[datetime] = None
-
-    # Cache limit on device (in MB)
     cache_limit_mb: int = Field(default=1024)
+
+    playlists: List["Playlist"] = Relationship(back_populates="owner", cascade_delete=True)
