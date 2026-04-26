@@ -13,8 +13,8 @@ COPY . .
 ARG VITE_API_URL=/api/v1
 ENV VITE_API_URL=$VITE_API_URL
 
-# Use npx to ensure tsc is found correctly
-RUN npx tsc -b && npx vite build
+# Build using the locally installed TypeScript and Vite
+RUN npm run build
 
 # Production stage with nginx
 FROM nginx:alpine
