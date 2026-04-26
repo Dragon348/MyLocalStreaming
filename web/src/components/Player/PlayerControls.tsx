@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { usePlayerStore } from '../store/player';
+import { usePlayerStore } from '../../store/player';
 
 export function formatDuration(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);

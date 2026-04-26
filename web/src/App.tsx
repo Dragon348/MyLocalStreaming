@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useAuthStore } from '../store/auth';
-import { api } from '../lib/api';
+import { useAuthStore } from './store/auth';
+import { api } from './lib/api';
 import type { Track } from './lib/types';
 import { usePlayerStore } from './store/player';
 import { useLibraryStore } from './store/library';
