@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Install all dependencies including devDependencies
-RUN npm ci --include=dev || npm install --include=dev
+RUN npm install
 
 COPY . .
 
