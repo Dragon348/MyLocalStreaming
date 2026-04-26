@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 from sqlmodel import Field, SQLModel
 import uuid
+from pydantic import EmailStr, field_validator
 
 
 class User(SQLModel, table=True):
