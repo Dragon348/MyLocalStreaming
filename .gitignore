@@ -1,44 +1,71 @@
 ```
 # Dependencies
 node_modules/
-
-# Environment variables
-.env
-.env.local
-.env.*
-
-# Build outputs
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
 dist/
 build/
-coverage/
-htmlcov/
+target/
+.gradle/
 
-# Logs
+# Logs and temp files
 *.log
-
-# Temporary files
 *.tmp
 *.swp
-*.swo
 
-# IDE files
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
 .vscode/
 .idea/
 
-# OS generated files
+# OS
 .DS_Store
 Thumbs.db
 
-# Package manager
-package-lock.json
-yarn.lock
+# Compiled files
+*.pyc
+*.class
+*.o
+*.exe
+*.dll
+*.so
+*.a
+*.obj
+*.out
 
-# TypeScript
-*.tsbuildinfo
+# Coverage
+coverage/
+htmlcov/
+.coverage
 
-# Vite
-vite.config.d.ts
-
-# Browser specific files
-.webpack.cache/
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
 ```

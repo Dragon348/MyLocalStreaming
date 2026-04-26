@@ -43,16 +43,16 @@ services:
     container_name: music-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql+asyncpg://music:${DB_PASSWORD}@postgres:5432/music_streaming
+      DATABASE_URL: postgresql+asyncpg://music:${DB_PASSWORD:-changeme123}@postgres:5432/music_streaming
       REDIS_URL: redis://redis:6379/0
-      SECRET_KEY: ${SECRET_KEY}
-      JWT_SECRET: ${JWT_SECRET}
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key-change-me}
+      JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-change-me}
       MUSIC_DIR: /data/music
       CACHE_DIR: /data/cache
       LOG_LEVEL: INFO
       SERVER_HOST: 0.0.0.0
     volumes:
-      - music_data:/data/music:ro
+      - music_data:/data/music
       - cache_data:/data/cache
     depends_on:
       postgres:
@@ -68,6 +68,20 @@ services:
       retries: 3
       start_period: 40s
 
+  # ==================== Frontend ====================
+  frontend:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=/api/v1
+    container_name: music-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - music-network
+
   # ==================== Reverse Proxy ====================
   caddy:
     image: caddy:2.8-alpine
@@ -82,6 +96,7 @@ services:
       - caddy_config:/config
     depends_on:
       - backend
+      - frontend
     networks:
       - music-network
 

@@ -7,7 +7,20 @@
         respond "OK" 200
     }
     
-    reverse_proxy backend:8000
+    # Frontend static files
+    root * /usr/share/caddy
+    file_server
+    
+    # API routes proxy to backend
+    reverse_proxy /api/v1/* backend:8000
+    reverse_proxy /docs backend:8000
+    reverse_proxy /openapi.json backend:8000
+    reverse_proxy /health backend:8000
+    reverse_proxy /stream/* backend:8000
+    reverse_proxy /ws/* backend:8000
+    
+    # All other routes go to frontend (SPA)
+    try_files {path} /index.html
 }
 
 music.yourdomain.com {

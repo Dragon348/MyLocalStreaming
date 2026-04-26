@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/components/Admin/AdminPanel.tsx","./src/components/Player/PlayerBar.tsx","./src/components/Player/PlayerControls.tsx","./src/hooks/useAudio.ts","./src/lib/api.ts","./src/lib/types.ts","./src/store/auth.ts","./src/store/library.ts","./src/store/player.ts"],"errors":true,"version":"5.9.3"}
