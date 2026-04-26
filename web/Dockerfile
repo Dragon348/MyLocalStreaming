@@ -2,9 +2,12 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Ensure NODE_ENV is not set to production during build
+ENV NODE_ENV=development
+
 COPY package.json package-lock.json* ./
 
-# Install all dependencies including devDependencies
+# Install all dependencies including devDependencies for build
 RUN npm install
 
 COPY . .
