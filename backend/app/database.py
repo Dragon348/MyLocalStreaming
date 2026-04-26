@@ -5,12 +5,19 @@ from sqlalchemy.orm import sessionmaker
 from app.config import settings
 
 
-# Async engine for database operations
-async_engine = create_async_engine(
-    settings.database_url,
-    echo=settings.environment == "development",
-    pool_pre_ping=True,
-)
+# Detect if using SQLite and adjust poolclass
+if settings.database_url.startswith("sqlite"):
+    async_engine = create_async_engine(
+        settings.database_url,
+        echo=settings.environment == "development",
+        connect_args={"check_same_thread": False},
+    )
+else:
+    async_engine = create_async_engine(
+        settings.database_url,
+        echo=settings.environment == "development",
+        pool_pre_ping=True,
+    )
 
 # Async session factory
 AsyncSessionLocal = sessionmaker(
