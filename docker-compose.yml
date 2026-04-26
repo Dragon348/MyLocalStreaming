@@ -84,6 +84,18 @@ services:
     volumes:
       - frontend_static:/usr/share/nginx/html:ro
 
+  # ==================== Frontend Dev (optional) ====================
+  # Uncomment this section for local frontend development without rebuilding
+  # frontend-dev:
+  #   image: nginx:alpine
+  #   container_name: music-frontend-dev
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./web/dist:/usr/share/nginx/html:ro
+  #     - ./web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  #   networks:
+  #     - music-network
+
   # ==================== Reverse Proxy ====================
   caddy:
     image: caddy:2.8-alpine

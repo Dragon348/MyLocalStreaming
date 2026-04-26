@@ -1,86 +1,51 @@
-# Docker related
-.dockerenv
-.dockerinit
-*.dockerignore
+```
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+target/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py.class
+*.py.obj
+.Python
+env/
+venv/
+.venv/
+.venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
 
 # Environment variables
 .env
 .env.local
-*.env.*
+.env.*
 
-# Logs
-*.log
-
-# Temporary files
-*.tmp
-*.swp
-*~
-
-# OS generated files
-.DS_Store
-Thumbs.db
-ehthumbs.db
-Icon?
-.directory
-.Trashes
-.fseventsd
-.Spotlight-V100
-.metadata_never_index
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnp
-.pnp.js
-.cache/
-
-# Virtual environments
-venv/
-env/
-ENV/
-.venv/
-.env/
-
-# IDE specific
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Build outputs
-target/
-build/
-dist/
-out/
-coverage/
-htmlcov/
-.coverage
-
-# Compression
+# Compressed files
 *.zip
 *.gz
 *.tar
@@ -103,18 +68,4 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
-# Gradle
-.gradle/
-build/
-
-# MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# PyTest
-.pytest_cache/
-
-# Git
-.git/
+```
