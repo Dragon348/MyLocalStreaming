@@ -3,7 +3,7 @@ from typing import Optional
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 import secrets
-from fastapi import Depends, HTTPException, status, Cookie
+from fastapi import Depends, HTTPException, status, Cookie, Header
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -18,15 +18,25 @@ REFRESH_TOKEN_EXPIRE_DAYS = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def oauth2_scheme(token: str = Cookie(default=None)) -> str:
-    """Extract token from cookie or header."""
-    if token is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    return token
+def oauth2_scheme(
+    access_token: Optional[str] = Cookie(default=None, alias="access_token"),
+    authorization: Optional[str] = Header(default=None),
+) -> str:
+    """Extract token from cookie or Authorization header."""
+    if access_token:
+        return access_token
+    
+    if authorization:
+        # Parse "Bearer <token>" format
+        parts = authorization.split()
+        if len(parts) == 2 and parts[0].lower() == "bearer":
+            return parts[1]
+    
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not authenticated",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
 
 
 async def get_current_user(
