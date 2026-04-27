@@ -155,10 +155,16 @@ export class ApiClient {
   }
 
   getStreamUrl(trackId: string, transcoded = false, bitrate: 'low' | 'medium' | 'high' = 'medium'): string {
-    const endpoint = transcoded
-      ? `/tracks/${trackId}/stream/transcoded?bitrate=${bitrate}`
-      : `/tracks/${trackId}/stream`;
-    return `${BASE_URL}${endpoint}`;
+    const bitrateMap: Record<string, number> = {
+      low: 64,
+      medium: 128,
+      high: 256,
+    };
+    
+    if (transcoded) {
+      return `${BASE_URL}/tracks/${trackId}/stream?transcode=true&bitrate=${bitrateMap[bitrate]}`;
+    }
+    return `${BASE_URL}/tracks/${trackId}/stream`;
   }
 
   async incrementPlayCount(trackId: string) {
