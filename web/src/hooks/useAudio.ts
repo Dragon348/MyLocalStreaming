@@ -73,7 +73,7 @@ export function useAudio() {
     };
   }, [setCurrentTime, setDuration, setLoading, setError, onTrackEnded]);
 
-  // Handle track changes
+  // Handle track changes and queue index changes
   useEffect(() => {
     if (!audioRef.current || !currentTrack) return;
 
@@ -92,7 +92,7 @@ export function useAudio() {
       setError('Playback failed');
       setLoading(false);
     });
-  }, [currentTrack?.id]);
+  }, [currentTrack?.id, currentTrack?.queueIndex]);
 
   // Handle play/pause
   useEffect(() => {
