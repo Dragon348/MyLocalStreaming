@@ -7,18 +7,12 @@
 }
 
 :80 {
-    # Frontend (Static files)
-    handle /* {
-        try_files {path} /index.html
-        reverse_proxy frontend:80
-    }
-
-    # Backend API
+    # Backend API - must be before generic handle
     handle /api/v1/* {
         reverse_proxy backend:8000
     }
 
-    # Swagger Docs
+    # Swagger Docs - must be before generic handle
     handle /docs {
         reverse_proxy backend:8000
     }
@@ -40,5 +34,11 @@
             header_up X-Forwarded-For {remote}
             header_up X-Forwarded-Proto {scheme}
         }
+    }
+
+    # Frontend (Static files) - catch-all must be last
+    handle /* {
+        try_files {path} /index.html
+        reverse_proxy frontend:80
     }
 }
