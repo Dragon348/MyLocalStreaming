@@ -21,7 +21,7 @@ RUN uv venv .venv && \
 # --- Runtime Stage ---
 FROM python:3.12-slim
 
-# Установка runtime зависимостей (ffmpeg для аудио)
+# Установка системных зависимостей (ffmpeg для аудио) и uv
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     curl \
@@ -29,9 +29,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Копируем виртуальное окружение из билдера
-COPY --from=builder /app/.venv /app/.venv
-COPY . .
+# Копируем uv из билдера
+COPY --from=builder /usr/local/bin/uv /usr/local/bin/uv
+
+# Копируем файлы проекта
+COPY pyproject.toml .
+COPY app ./app
+
+# Создаем виртуальное окружение и устанавливаем зависимости уже в runtime образе
+RUN uv venv .venv && \
+    UV_PROJECT_ENVIRONMENT=/app/.venv uv pip install .
 
 # Указываем путь к виртуальному окружению
 ENV VIRTUAL_ENV=/app/.venv
