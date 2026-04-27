@@ -134,6 +134,13 @@ export const usePlayerStore = create<PlayerState>()(
         if (state.queue.length === 0) return;
 
         const nextIndex = state._getNextIndex();
+        
+        // If next index is beyond queue length (end of queue with no repeat), stop playback
+        if (nextIndex >= state.queue.length) {
+          set({ isPlaying: false });
+          return;
+        }
+        
         const nextTrack = state.queue[nextIndex];
 
         set({
@@ -170,7 +177,11 @@ export const usePlayerStore = create<PlayerState>()(
         });
       },
 
-      seek: (time) => set({ currentTime: Math.max(0, time) }),
+      seek: (time) => {
+        set({ currentTime: Math.max(0, time) });
+        // If we have an audio element, also seek it directly
+        // This is handled by the useAudio hook's seek function
+      },
 
       setDuration: (duration) => set({ duration }),
 
@@ -302,7 +313,8 @@ export const usePlayerStore = create<PlayerState>()(
           if (state.repeat === 'all') {
             nextIndex = 0;
           } else {
-            nextIndex = state.queueIndex;
+            // Return a value > queue length to signal end of queue
+            return state.queue.length;
           }
         }
         return nextIndex;
