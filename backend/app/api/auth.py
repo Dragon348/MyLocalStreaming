@@ -28,12 +28,12 @@ from app.config import settings
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 async def register(
     user_data: RegisterRequest,
     db: AsyncSession = Depends(get_db),
-) -> User:
-    """Register a new user."""
+) -> dict:
+    """Register a new user and automatically log them in."""
     # Check if username exists
     statement = select(User).where(User.username == user_data.username)
     result = await db.exec(statement)
@@ -64,7 +64,29 @@ async def register(
     await db.commit()
     await db.refresh(user)
 
-    return user
+    # Create tokens (auto-login after registration)
+    access_token = create_access_token(
+        data={"sub": user.id},
+        secret_key=settings.jwt_secret,
+    )
+    refresh_token = create_refresh_token()
+
+    # Store session
+    session = Session(
+        user_id=user.id,
+        refresh_token_hash=hash_refresh_token(refresh_token),
+        device_name=user_data.device_name if hasattr(user_data, 'device_name') else "Web",
+        expires_at=Session.get_expiry(),
+    )
+    db.add(session)
+    await db.commit()
+
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+        "expires_in": 60 * 60,
+    }
 
 
 @router.post("/login", response_model=Token)
