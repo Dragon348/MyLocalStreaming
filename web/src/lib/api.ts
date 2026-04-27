@@ -161,10 +161,14 @@ export class ApiClient {
       high: 256,
     };
     
+    const token = this.getAccessToken();
+    const tokenParam = token ? `?token=${token}` : '';
+    
     if (transcoded) {
-      return `${BASE_URL}/tracks/stream/${trackId}?transcode=true&bitrate=${bitrateMap[bitrate]}`;
+      const separator = tokenParam ? '&' : '?';
+      return `${BASE_URL}/tracks/stream/${trackId}${separator}transcode=true&bitrate=${bitrateMap[bitrate]}${tokenParam}`;
     }
-    return `${BASE_URL}/tracks/stream/${trackId}`;
+    return `${BASE_URL}/tracks/stream/${trackId}${tokenParam}`;
   }
 
   async incrementPlayCount(trackId: string) {
