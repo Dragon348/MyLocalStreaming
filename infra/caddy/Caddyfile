@@ -1,18 +1,24 @@
 {
     auto_https off
+    log {
+        level INFO
+        format json
+    }
 }
 
 :80 {
-    root * /workspace/web/dist
-
-    handle /health* {
-        respond "OK" 200
+    # Frontend (Static files)
+    handle /* {
+        try_files {path} /index.html
+        reverse_proxy frontend:80
     }
 
+    # Backend API
     handle /api/v1/* {
         reverse_proxy backend:8000
     }
 
+    # Swagger Docs
     handle /docs {
         reverse_proxy backend:8000
     }
@@ -21,15 +27,18 @@
         reverse_proxy backend:8000
     }
 
+    # Music Streaming
     handle /stream/* {
         reverse_proxy backend:8000
     }
 
+    # WebSockets
     handle /ws/* {
-        reverse_proxy backend:8000
+        reverse_proxy backend:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+        }
     }
-
-    # Frontend static files and SPA fallback
-    try_files {path} /index.html
-    file_server
 }
