@@ -162,9 +162,9 @@ export class ApiClient {
     };
     
     if (transcoded) {
-      return `${BASE_URL}/tracks/${trackId}/stream?transcode=true&bitrate=${bitrateMap[bitrate]}`;
+      return `${BASE_URL}/tracks/stream/${trackId}?transcode=true&bitrate=${bitrateMap[bitrate]}`;
     }
-    return `${BASE_URL}/tracks/${trackId}/stream`;
+    return `${BASE_URL}/tracks/stream/${trackId}`;
   }
 
   async incrementPlayCount(trackId: string) {
