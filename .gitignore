@@ -1,42 +1,24 @@
 ```
 # Build artifacts
-dist/
-build/
-*.pyc
-__pycache__/
-
+web/dist/
 # Dependencies
 node_modules/
-venv/
-.venv/
-
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 # Environment
 .env
 .env.local
-*.env.*
-
+.env.*
 # Editors
 .vscode/
 .idea/
 *.swp
 *.swo
-*.tmp
-
 # Logs
 *.log
-
-# Python specific
-*.pyc
-__pycache__/
-*.pyo
-*.pyd
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-
-# Testing
-.pytest_cache/
-.mypy_cache/
+# Temp files
+*.tmp
 ```
