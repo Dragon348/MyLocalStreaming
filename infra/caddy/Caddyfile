@@ -3,32 +3,33 @@
 }
 
 :80 {
-    route /health* {
+    root * /workspace/web/dist
+
+    handle /health* {
         respond "OK" 200
     }
-    
-    # Frontend static files
-    root * /usr/share/caddy
-    file_server
-    
-    # API routes proxy to backend
-    reverse_proxy /api/v1/* backend:8000
-    reverse_proxy /docs backend:8000
-    reverse_proxy /openapi.json backend:8000
-    reverse_proxy /health backend:8000
-    reverse_proxy /stream/* backend:8000
-    reverse_proxy /ws/* backend:8000
-    
-    # All other routes go to frontend (SPA)
+
+    handle /api/v1/* {
+        reverse_proxy localhost:8000
+    }
+
+    handle /docs {
+        reverse_proxy localhost:8000
+    }
+
+    handle /openapi.json {
+        reverse_proxy localhost:8000
+    }
+
+    handle /stream/* {
+        reverse_proxy localhost:8000
+    }
+
+    handle /ws/* {
+        reverse_proxy localhost:8000
+    }
+
+    # Frontend static files and SPA fallback
     try_files {path} /index.html
-}
-
-music.yourdomain.com {
-    reverse_proxy /api/v1/* backend:8000
-    reverse_proxy /docs backend:8000
-    reverse_proxy /openapi.json backend:8000
-    reverse_proxy /health backend:8000
-    reverse_proxy /* backend:8000
-
-    tls internal
+    file_server
 }
