@@ -2,10 +2,11 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies (use npm install if package-lock.json is missing or incompatible)
-RUN npm ci || npm install
+# Install dependencies - use npm install for flexibility with lock file
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
@@ -13,8 +14,7 @@ COPY . .
 ARG VITE_API_URL=/api/v1
 ENV VITE_API_URL=$VITE_API_URL
 
-# Use npx to ensure we use the locally installed typescript
-RUN npm run build
+RUN node ./node_modules/vite/bin/vite.js build
 
 # Production stage with nginx
 FROM nginx:alpine
