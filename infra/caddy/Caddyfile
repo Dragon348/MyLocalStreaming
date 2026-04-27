@@ -21,7 +21,7 @@
         reverse_proxy backend:8000
     }
 
-    # Music Streaming
+    # Music Streaming - must be before generic handle
     handle /stream/* {
         reverse_proxy backend:8000
     }

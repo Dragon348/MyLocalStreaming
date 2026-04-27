@@ -4,6 +4,7 @@ app/config.py
 app/database.py
 app/main.py
 app/api/__init__.py
+app/api/admin.py
 app/api/auth.py
 app/api/playlists.py
 app/api/tracks.py

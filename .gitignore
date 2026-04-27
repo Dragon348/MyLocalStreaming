@@ -1,1 +1,40 @@
-Nothing should be ignored based on the provided file changes. The only modified file is a TypeScript source file (`web/src/hooks/useAudio.ts`), which is a legitimate source code file that should not be ignored.
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Dependencies
+.venv/
+venv/
+env/
+node_modules/
+
+# Build artifacts
+dist/
+build/
+target/
+
+# Web build
+web/dist/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+```

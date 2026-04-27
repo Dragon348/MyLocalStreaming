@@ -4,6 +4,7 @@ import { api } from './lib/api';
 import type { Track } from './lib/types';
 import { usePlayerStore } from './store/player';
 import { useLibraryStore } from './store/library';
+import { useAudio } from './hooks/useAudio';
 import { PlayerBar } from './components/Player/PlayerBar';
 import { AdminPanel } from './components/Admin/AdminPanel';
 
@@ -214,6 +215,9 @@ function LibraryPage() {
 function App() {
   const { isAuthenticated, isLoading, restoreSession, logout, user } = useAuthStore();
   const [currentPage, setCurrentPage] = useState<'library' | 'admin'>('library');
+  
+  // Initialize audio player hook
+  useAudio();
 
   useEffect(() => {
     restoreSession();

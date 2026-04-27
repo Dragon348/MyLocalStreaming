@@ -17,6 +17,8 @@ Requires-Dist: cachetools==5.3.2
 Requires-Dist: pydantic-settings==2.1.0
 Requires-Dist: email-validator==2.1.0
 Requires-Dist: aiofiles==23.2.1
+Requires-Dist: mutagen==1.47.0
+Requires-Dist: psutil==5.9.6
 Provides-Extra: dev
 Requires-Dist: pytest==7.4.3; extra == "dev"
 Requires-Dist: black==23.10.1; extra == "dev"
