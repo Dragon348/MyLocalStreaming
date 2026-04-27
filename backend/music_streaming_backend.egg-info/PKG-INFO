@@ -1,0 +1,24 @@
+Metadata-Version: 2.4
+Name: music-streaming-backend
+Version: 0.1.0
+Summary: Music Streaming Service Backend
+Author-email: Author <author@example.com>
+Requires-Dist: fastapi==0.104.1
+Requires-Dist: uvicorn[standard]==0.24.0
+Requires-Dist: sqlmodel>=0.0.25
+Requires-Dist: asyncpg==0.29.0
+Requires-Dist: python-multipart==0.0.6
+Requires-Dist: passlib[bcrypt]==1.7.4
+Requires-Dist: bcrypt==4.0.1
+Requires-Dist: python-jose[cryptography]==3.3.0
+Requires-Dist: python-dotenv==1.0.0
+Requires-Dist: aiosqlite==0.19.0
+Requires-Dist: cachetools==5.3.2
+Requires-Dist: pydantic-settings==2.1.0
+Requires-Dist: email-validator==2.1.0
+Requires-Dist: aiofiles==23.2.1
+Provides-Extra: dev
+Requires-Dist: pytest==7.4.3; extra == "dev"
+Requires-Dist: black==23.10.1; extra == "dev"
+Requires-Dist: flake8==6.1.0; extra == "dev"
+Requires-Dist: mypy==1.7.1; extra == "dev"

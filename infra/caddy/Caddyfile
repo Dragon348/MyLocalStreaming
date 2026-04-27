@@ -1,21 +1,44 @@
 {
     auto_https off
+    log {
+        level INFO
+        format json
+    }
 }
 
 :80 {
-    route /health* {
-        respond "OK" 200
+    # Frontend (Static files)
+    handle /* {
+        try_files {path} /index.html
+        reverse_proxy frontend:80
     }
-    
-    reverse_proxy backend:8000
-}
 
-music.yourdomain.com {
-    reverse_proxy /api/v1/* backend:8000
-    reverse_proxy /docs backend:8000
-    reverse_proxy /openapi.json backend:8000
-    reverse_proxy /health backend:8000
-    reverse_proxy /* backend:8000
+    # Backend API
+    handle /api/v1/* {
+        reverse_proxy backend:8000
+    }
 
-    tls internal
+    # Swagger Docs
+    handle /docs {
+        reverse_proxy backend:8000
+    }
+
+    handle /openapi.json {
+        reverse_proxy backend:8000
+    }
+
+    # Music Streaming
+    handle /stream/* {
+        reverse_proxy backend:8000
+    }
+
+    # WebSockets
+    handle /ws/* {
+        reverse_proxy backend:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
 }

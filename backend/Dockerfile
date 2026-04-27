@@ -10,17 +10,18 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
 
-# Копируем файлы зависимостей
+# Копируем файлы проекта
 COPY pyproject.toml .
+COPY app ./app
 
 # Создаем виртуальное окружение и устанавливаем зависимости
-RUN uv venv /app/.venv && \
+RUN uv venv .venv && \
     UV_PROJECT_ENVIRONMENT=/app/.venv uv pip install .
 
 # --- Runtime Stage ---
 FROM python:3.12-slim
 
-# Установка runtime зависимостей (ffmpeg для аудио)
+# Установка системных зависимостей (ffmpeg для аудио) и uv
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     curl \
@@ -28,13 +29,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Копируем виртуальное окружение и код из билдера
-COPY --from=builder /app/.venv /app/.venv
-COPY . .
+# Копируем uv из билдера
+COPY --from=builder /usr/local/bin/uv /usr/local/bin/uv
 
-# Активируем окружение через PATH
-ENV PATH="/app/.venv/bin:$PATH"
+# Копируем файлы проекта
+COPY pyproject.toml .
+COPY app ./app
+
+# Создаем виртуальное окружение и устанавливаем зависимости уже в runtime образе
+RUN uv venv .venv && \
+    UV_PROJECT_ENVIRONMENT=/app/.venv uv pip install .
+
+# Указываем путь к виртуальному окружению
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
