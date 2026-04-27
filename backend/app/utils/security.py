@@ -3,12 +3,59 @@ from typing import Optional
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 import secrets
+from fastapi import Depends, HTTPException, status, Cookie
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.database import get_db
+from app.models.user import User
+from app.config import settings
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 REFRESH_TOKEN_EXPIRE_DAYS = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def oauth2_scheme(token: str = Cookie(default=None)) -> str:
+    """Extract token from cookie or header."""
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return token
+
+
+async def get_current_user(
+    db: AsyncSession = Depends(get_db),
+    token: str = Depends(oauth2_scheme),
+) -> User:
+    """Get current authenticated user from JWT token."""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    payload = decode_token(token, settings.jwt_secret)
+    if payload is None:
+        raise credentials_exception
+    
+    user_id: str = payload.get("sub")
+    if user_id is None:
+        raise credentials_exception
+    
+    statement = select(User).where(User.id == user_id)
+    result = await db.exec(statement)
+    user = result.first()
+    
+    if user is None or not user.is_active:
+        raise credentials_exception
+    
+    return user
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

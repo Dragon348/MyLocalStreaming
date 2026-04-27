@@ -22,6 +22,7 @@ from app.utils.security import (
     create_refresh_token,
     hash_refresh_token,
     verify_refresh_token,
+    get_current_user,
 )
 from app.config import settings
 
@@ -210,3 +211,11 @@ async def logout(
         await db.commit()
 
     return {"message": "Successfully logged out"}
+
+
+@router.get("/me", response_model=UserResponse)
+async def get_current_user_info(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """Get current authenticated user information."""
+    return current_user
