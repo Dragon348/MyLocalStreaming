@@ -1,34 +1,22 @@
-# Docker-related
-Dockerfile
-.dockerignore
-
+```
 # Dependencies
 node_modules/
 .venv/
 venv/
 __pycache__/
 *.egg-info/
-dist-packages/
-
-# Build artifacts
-build/
 dist/
+build/
 target/
-*.pyc
-*.class
-*.o
-*.obj
-*.so
-*.dll
-*.exe
+.gradle/
 
-# Logs and temporary files
+# Logs and temp files
 *.log
 *.tmp
 *.swp
 *.swo
 
-# Environment files
+# Environment
 .env
 .env.local
 *.env.*
@@ -36,20 +24,26 @@ target/
 # Editors
 .vscode/
 .idea/
-*.swp
-*.swo
+*.pyc
+*.class
+*.o
+*.exe
+*.dll
+*.so
+*.a
+*.obj
+*.out
 
-# OS
+# OS generated files
 .DS_Store
 Thumbs.db
 
 # Coverage
+.coverage
 coverage/
 htmlcov/
-.coverage
 
 # Python specific
-*.pyc
-__pycache__/
-.pytest_cache/
 .mypy_cache/
+.pytest_cache/
+```
