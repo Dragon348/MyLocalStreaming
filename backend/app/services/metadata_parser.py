@@ -74,6 +74,14 @@ class MetadataParser:
             # Get tags
             tags = cls._extract_tags(audio, file_path)
 
+            # Ensure release_year is an integer or None
+            release_year = tags.get("year")
+            if release_year is not None:
+                try:
+                    release_year = int(str(release_year)[:4])
+                except (ValueError, TypeError):
+                    release_year = None
+
             return {
                 "title": tags.get("title", file_path.stem),
                 "artist": tags.get("artist"),
@@ -85,7 +93,7 @@ class MetadataParser:
                 "sample_rate_hz": sample_rate,
                 "channels": channels,
                 "track_number": tags.get("track_number"),
-                "release_year": tags.get("year"),
+                "release_year": release_year,
                 "cover_art": tags.get("cover_art"),
             }
 
