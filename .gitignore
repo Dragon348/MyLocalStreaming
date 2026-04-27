@@ -1,37 +1,5 @@
 ```
-# Virtual Environment
-.venv/
+# Docker-related
+Dockerfile
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-ENV/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-*.pot
-*.po
-*~
-.pytest_cache/
-.mypy_cache/
-.hypothesis/
-.eggs/
-*.egg-info/
-.installed.cfg
-.pep8
-.flake8
-.isort.cfg
-.black
 ```
