@@ -81,17 +81,17 @@ export function useAudio() {
     setLoading(true);
     setError(null);
 
-    const streamUrl = api.getStreamUrl(currentTrack.id, true, 'medium');
+    const streamUrl = api.getStreamUrl(currentTrack.id, false);
     audio.src = streamUrl;
     audio.load();
 
-    if (isPlaying) {
-      audio.play().catch((err) => {
-        console.error('Playback failed:', err);
-        setError('Playback failed');
-        setLoading(false);
-      });
-    }
+    // Always attempt to play when a new track is loaded
+    // The isPlaying state should be true when play() is called from the store
+    audio.play().catch((err) => {
+      console.error('Playback failed:', err);
+      setError('Playback failed');
+      setLoading(false);
+    });
   }, [currentTrack?.id]);
 
   // Handle play/pause
