@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: music
       POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme123}
-      POSTGRES_DB: music_streaming
+      POSTGRES_DB: music
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -43,7 +43,7 @@ services:
     container_name: music-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql+asyncpg://music:${DB_PASSWORD:-changeme123}@postgres:5432/music_streaming
+      DATABASE_URL: postgresql+asyncpg://music:${DB_PASSWORD:-changeme123}@postgres:5432/music
       REDIS_URL: redis://redis:6379/0
       SECRET_KEY: ${SECRET_KEY:-your-secret-key-change-me}
       JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-change-me}
@@ -52,7 +52,7 @@ services:
       LOG_LEVEL: INFO
       SERVER_HOST: 0.0.0.0
     volumes:
-      - music_data:/data/music
+      - ./data/music:/data/music:ro
       - cache_data:/data/cache
     depends_on:
       postgres:
