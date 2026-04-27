@@ -10,23 +10,23 @@
     }
 
     handle /api/v1/* {
-        reverse_proxy localhost:8000
+        reverse_proxy backend:8000
     }
 
     handle /docs {
-        reverse_proxy localhost:8000
+        reverse_proxy backend:8000
     }
 
     handle /openapi.json {
-        reverse_proxy localhost:8000
+        reverse_proxy backend:8000
     }
 
     handle /stream/* {
-        reverse_proxy localhost:8000
+        reverse_proxy backend:8000
     }
 
     handle /ws/* {
-        reverse_proxy localhost:8000
+        reverse_proxy backend:8000
     }
 
     # Frontend static files and SPA fallback
