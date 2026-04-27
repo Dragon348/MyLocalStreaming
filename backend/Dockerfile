@@ -10,11 +10,12 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
 
-# Копируем файлы зависимостей
+# Копируем файлы проекта
 COPY pyproject.toml .
+COPY app ./app
 
 # Создаем виртуальное окружение и устанавливаем зависимости
-RUN uv venv /app/.venv && \
+RUN uv venv .venv && \
     UV_PROJECT_ENVIRONMENT=/app/.venv uv pip install .
 
 # --- Runtime Stage ---
@@ -28,12 +29,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Копируем виртуальное окружение и код из билдера
+# Копируем виртуальное окружение из билдера
 COPY --from=builder /app/.venv /app/.venv
 COPY . .
 
-# Активируем окружение через PATH
-ENV PATH="/app/.venv/bin:$PATH"
+# Указываем путь к виртуальному окружению
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 EXPOSE 8000
 
