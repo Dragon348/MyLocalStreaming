@@ -5,6 +5,7 @@ import { api } from '../lib/api';
 export function useAudio() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressInterval = useRef<number | null>(null);
+  const isUserSeeking = useRef(false);
 
   const {
     currentTrack,
@@ -73,7 +74,7 @@ export function useAudio() {
     };
   }, [setCurrentTime, setDuration, setLoading, setError, onTrackEnded]);
 
-  // Handle track changes
+  // Handle track changes and queue index changes
   useEffect(() => {
     if (!audioRef.current || !currentTrack) return;
 
@@ -81,18 +82,24 @@ export function useAudio() {
     setLoading(true);
     setError(null);
 
-    const streamUrl = api.getStreamUrl(currentTrack.id, true, 'medium');
+    const streamUrl = api.getStreamUrl(currentTrack.id, false);
     audio.src = streamUrl;
     audio.load();
 
-    if (isPlaying) {
-      audio.play().catch((err) => {
+    // Always attempt to play when a new track is loaded
+    // The isPlaying state should be true when play() is called from the store
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        // Playback started successfully
+        setLoading(false);
+      }).catch((err) => {
         console.error('Playback failed:', err);
         setError('Playback failed');
         setLoading(false);
       });
     }
-  }, [currentTrack?.id]);
+  }, [currentTrack?.id, currentTrack?.queueIndex]);
 
   // Handle play/pause
   useEffect(() => {
@@ -116,12 +123,27 @@ export function useAudio() {
     audioRef.current.volume = isMuted ? 0 : volume;
   }, [volume, isMuted]);
 
-  // Handle seeking
+  // Handle seeking - update both state and audio element
   const seek = useCallback((time: number) => {
     if (!audioRef.current) return;
+    isUserSeeking.current = true;
     audioRef.current.currentTime = time;
     setCurrentTime(time);
+    // Reset flag after a short delay to allow natural playback to resume
+    setTimeout(() => {
+      isUserSeeking.current = false;
+    }, 100);
   }, [setCurrentTime]);
+
+  // Sync store currentTime changes with audio element (for external seeks)
+  useEffect(() => {
+    if (!audioRef.current || !currentTrack || isUserSeeking.current) return;
+    // Only update if the difference is significant (user seek from another source)
+    const diff = Math.abs(audioRef.current.currentTime - currentTime);
+    if (diff > 1) {
+      audioRef.current.currentTime = currentTime;
+    }
+  }, [currentTime, currentTrack]);
 
   // Manual progress update for smoother UI
   useEffect(() => {
